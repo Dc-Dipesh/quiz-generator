@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz Photo Generator</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+    <link rel="stylesheet" href="./assets/css/style.css" />
+    <style>
+      .quiz-container {
+        width: 1000px;
+        height: 1000px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background-image: url("./assets/images/background.png");
+        background-size: cover;
+        padding: 0 20px;
+        box-sizing: border-box;
+      }
+      .option {
+        display: flex;
+        align-items: center;
+      }
+      .option span {
+        margin-right: 8px;
+      }
+      .correct-answer {
+        border: 2px solid green;
+      }
+      .correct-icon {
+        background-color: green;
+        color: white;
+        margin-left: auto;
+        padding: 4px;
+        border-radius: 50%;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-gray-100 flex flex-col items-center justify-center min-h-screen space-y-8"
+  >
+    <div class="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full">
+      <h2 class="text-2xl font-bold mb-6">Quiz Photo Generator</h2>
+      <div class="mb-4">
+        <label class="block text-gray-700 mb-2">Question</label>
+        <input
+          id="question"
+          type="text"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg"
+          placeholder="Enter your question"
+        />
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 mb-2">Options</label>
+        <div id="options">
+          <div class="flex items-center mb-2">
+            <input
+              type="text"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg mr-2"
+              placeholder="Option 1"
+            />
+            <input type="radio" name="correctOption" value="0" />
+          </div>
+          <div class="flex items-center mb-2">
+            <input
+              type="text"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg mr-2"
+              placeholder="Option 2"
+            />
+            <input type="radio" name="correctOption" value="1" />
+          </div>
+          <div class="flex items-center mb-2">
+            <input
+              type="text"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg mr-2"
+              placeholder="Option 3"
+            />
+            <input type="radio" name="correctOption" value="2" />
+          </div>
+          <div class="flex items-center mb-2">
+            <input
+              type="text"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg mr-2"
+              placeholder="Option 4"
+            />
+            <input type="radio" name="correctOption" value="3" />
+          </div>
+        </div>
+      </div>
+      <button
+        onclick="generatePreviews()"
+        class="bg-blue-500 text-white px-4 py-2 rounded-lg"
+      >
+        Generate Previews
+      </button>
+    </div>
+
+    <div class="">
+        <div
+        id="previewWithoutAnswer"
+        class="bg-white p-8 rounded-lg shadow-lg w-full mt-10 hidden"
+      >
+        <h2 class="text-2xl font-bold mb-6">Quiz Without Answer</h2>
+        <div id="quizWithoutAnswer" class="quiz-container">
+          <div
+            class="mb-20 text-center bg-[#f7f7f7] p-4 rounded-md text-5xl font-bold"
+          >
+            What software company headquartered in Redmond, Washington?
+          </div>
+          <div
+            class="option mb-6 bg-[#f7f7f7] p-2 rounded-full text-4xl flex items-center"
+          >
+            <span
+              class="bg-white rounded-full h-full aspect-square text-center text-lg flex items-center justify-center"
+              >A.</span
+            >
+            Aspark
+          </div>
+          <div
+            class="option mb-6 bg-[#f7f7f7] p-2 rounded-full text-4xl flex items-center"
+          >
+            <span
+              class="bg-white rounded-full h-full aspect-square text-center text-lg flex items-center justify-center"
+              >B.</span
+            >
+            Bidhee
+          </div>
+          <div
+            class="option mb-6 bg-[#f7f7f7] p-2 rounded-full text-4xl flex items-center"
+          >
+            <span
+              class="bg-white rounded-full h-full aspect-square text-center text-lg flex items-center justify-center"
+              >C.</span
+            >
+            Apple
+          </div>
+          <div
+            class="option mb-6 bg-[#f7f7f7] p-2 rounded-full text-4xl flex items-center"
+          >
+            <span
+              class="bg-white rounded-full h-full aspect-square text-center text-lg flex items-center justify-center"
+              >D.</span
+            >
+            Microsoft
+          </div>
+        </div>
+        <button
+          onclick="downloadImage('quizWithoutAnswer')"
+          class="mt-4 bg-green-500 text-white px-4 py-2 rounded-lg"
+        >
+          Download Image Without Answer
+        </button>
+      </div>
+      <div
+        id="previewWithAnswer"
+        class="bg-white p-8 rounded-lg shadow-lg w-full hidden mt-10"
+      >
+        <h2 class="text-2xl font-bold mb-6">Quiz With Answer</h2>
+        <div id="quizWithAnswer" class="quiz-container">
+          <div
+            class="mb-20 text-center bg-[#f7f7f7] p-4 rounded-md text-5xl font-bold"
+          >
+            What software company headquartered in Redmond, Washington?
+          </div>
+          <div
+            class="option mb-6 bg-[#f7f7f7] p-2 rounded-full text-4xl flex items-center"
+          >
+            <span
+              class="bg-white rounded-full h-full aspect-square text-center text-lg flex items-center justify-center"
+              >A.</span
+            >
+            Apple
+          </div>
+          <div
+            class="option mb-6 bg-[#f7f7f7] p-2 rounded-full text-4xl flex items-center correct-answer"
+          >
+            <span
+              class="bg-white rounded-full h-full aspect-square text-center text-lg flex items-center justify-center"
+              >B.</span
+            >
+            Microsoft<i class="fas fa-check correct-icon"></i>
+          </div>
+          <div
+            class="option mb-6 bg-[#f7f7f7] p-2 rounded-full text-4xl flex items-center"
+          >
+            <span
+              class="bg-white rounded-full h-full aspect-square text-center text-lg flex items-center justify-center"
+              >C.</span
+            >
+            Aspark
+          </div>
+          <div
+            class="option mb-6 bg-[#f7f7f7] p-2 rounded-full text-4xl flex items-center"
+          >
+            <span
+              class="bg-white rounded-full h-full aspect-square text-center text-lg flex items-center justify-center"
+              >D.</span
+            >
+            Bidhee
+          </div>
+        </div>
+        <button
+          onclick="downloadImage('quizWithAnswer')"
+          class="mt-4 bg-green-500 text-white px-4 py-2 rounded-lg"
+        >
+          Download Image With Answer
+        </button>
+      </div>
+      
+    </div>
+
+    <script>
+      function generatePreviews() {
+        const question = document.getElementById("question").value;
+        const options = Array.from(
+          document.querySelectorAll('#options input[type="text"]')
+        ).map((input) => input.value);
+        const correctOptionIndex = Array.from(
+          document.querySelectorAll('input[name="correctOption"]')
+        ).findIndex((input) => input.checked);
+        const optionLabels = ["A", "B", "C", "D"];
+
+        if (question === "" || options.some((option) => option === "")) {
+          alert("Please fill in all fields.");
+          return;
+        }
+
+        const quizWithAnswer = document.getElementById("quizWithAnswer");
+        const quizWithoutAnswer = document.getElementById("quizWithoutAnswer");
+
+        quizWithAnswer.innerHTML = "";
+        quizWithoutAnswer.innerHTML = "";
+
+        const questionElementWithAnswer = document.createElement("div");
+        questionElementWithAnswer.textContent = question;
+        questionElementWithAnswer.classList.add(
+          "mb-20",
+          "text-center",
+          "bg-[#f7f7f7]",
+          "p-4",
+          "rounded-md",
+          "text-5xl",
+          "font-bold"
+        );
+        quizWithAnswer.appendChild(questionElementWithAnswer);
+
+        const questionElementWithoutAnswer = document.createElement("div");
+        questionElementWithoutAnswer.textContent = question;
+        questionElementWithoutAnswer.classList.add(
+          "mb-20",
+          "text-center",
+          "bg-[#f7f7f7]",
+          "p-4",
+          "rounded-md",
+          "text-5xl",
+          "font-bold"
+        );
+        quizWithoutAnswer.appendChild(questionElementWithoutAnswer);
+
+        options.forEach((option, index) => {
+          const optionElementWithAnswer = document.createElement("div");
+          optionElementWithAnswer.classList.add(
+            "option",
+            "mb-6",
+            "bg-[#f7f7f7]",
+            "p-2",
+            "rounded-full",
+            "text-4xl",
+            "flex",
+            "items-center"
+          );
+          optionElementWithAnswer.innerHTML = `<span class="bg-white rounded-full h-full aspect-square text-center text-lg flex items-center justify-center">${optionLabels[index]}.</span> ${option}`;
+          if (index === correctOptionIndex) {
+            optionElementWithAnswer.classList.add("correct-answer");
+            const correctTag = document.createElement("i");
+            correctTag.classList.add("fas", "fa-check", "correct-icon");
+            optionElementWithAnswer.appendChild(correctTag);
+          }
+          quizWithAnswer.appendChild(optionElementWithAnswer);
+
+          const optionElementWithoutAnswer = document.createElement("div");
+          optionElementWithoutAnswer.classList.add(
+            "option",
+            "mb-6",
+            "bg-[#f7f7f7]",
+            "p-2",
+            "rounded-full",
+            "text-4xl",
+            "flex",
+            "items-center"
+          );
+          optionElementWithoutAnswer.innerHTML = `<span class="bg-white rounded-full h-full aspect-square text-center text-lg flex items-center justify-center">${optionLabels[index]}.</span> ${option}`;
+          quizWithoutAnswer.appendChild(optionElementWithoutAnswer);
+        });
+
+        document.getElementById("previewWithAnswer").classList.remove("hidden");
+        document
+          .getElementById("previewWithoutAnswer")
+          .classList.remove("hidden");
+      }
+
+      function downloadImage(containerId) {
+        const container = document.getElementById(containerId);
+        html2canvas(container, { width: 1000, height: 1000 }).then((canvas) => {
+          const link = document.createElement("a");
+          link.href = canvas.toDataURL("image/jpeg");
+          link.download = `${containerId}.jpg`;
+          link.click();
+        });
+      }
+    </script>
+  </body>
+</html>
